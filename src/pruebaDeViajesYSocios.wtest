@@ -1,0 +1,90 @@
+import viajes.*
+import socios.*
+
+describe "Viajes y Socios"{
+	
+	const marDelPlata = new ViajesPlaya (idioma = #{"español"},largoMts = 1000)
+	const miami = new ViajesPlaya (idioma = #{"ingles"},largoMts = 2000)
+	const bariloche = new SalidaDeTrekking (idioma = #{"español"},kmSendero = 100,salidaDelSolXAnio = 130)
+	const nevada = new SalidaDeTrekking (idioma = #{"ingles"},kmSendero = 50,salidaDelSolXAnio = 240)
+	const dubai = new ExcurcionACiudadTropical (idioma = #{"arebe","ingles"},atracionesAVisitar = 4)
+	const newYork = new ExcurcionACiudad (idioma = #{"ingles"},atracionesAVisitar = 4)
+	const moscu = new ExcurcionACiudad (idioma = #{"aleman"},atracionesAVisitar = 8)
+	const actividadFisica = new ClaseDeGimnasia(idioma = #{"español"})
+	
+	var roque = new Socio 
+	(leAgradaElSol = true ,actividadesRealizadas = #{marDelPlata,miami},maximoDeActividades = 2,edad = 40 ,idiomasQueHabla = #{"ingles","español"} )
+	
+	var ana = new Socio 
+	(leAgradaElSol = false ,actividadesRealizadas = #{marDelPlata,miami},maximoDeActividades = 3,edad = 25 ,idiomasQueHabla = #{"ingles","español","Aleman"} )
+
+	
+	const vida = new Libro (idioma = "español", paginas = 600 , autor = "carlos")
+	const arte = new Libro (idioma = "frances", paginas = 100 , autor = "ivana")
+	const mecanica = new Libro (idioma = "ingles", paginas = 300 , autor = "carlos")
+	const novela = new Libro (idioma = "portuges", paginas = 50 , autor = "cristiano")
+	
+		
+	const libreriaA = new TallerLiterario(libros = #{vida,arte,mecanica})
+	const libreriaB = new TallerLiterario(libros = #{arte,novela,mecanica})
+	
+	var pepe = new Socio 
+	(leAgradaElSol = true ,actividadesRealizadas = #{},maximoDeActividades = 2,edad = 40 ,idiomasQueHabla = #{"ingles"} )
+	
+	test"Roque y Ana"{
+	
+	assert.equals(3,dubai.diasDeActividad())
+	assert.equals(2,newYork.diasDeActividad())
+	
+	assert.equals(false,dubai.esfueszo())
+	assert.equals(false,newYork.esfueszo())
+	
+	assert.equals(true,dubai.produceBronceado())
+	assert.equals(false,newYork.produceBronceado())
+	
+	assert.equals(2,bariloche.diasDeActividad())
+	assert.equals(1,nevada.diasDeActividad())
+	
+	assert.equals(true,bariloche.esfueszo())
+	assert.equals(false,nevada.esfueszo())
+	
+	assert.equals(false,bariloche.produceBronceado())
+	assert.equals(true,nevada.produceBronceado())	
+	
+	assert.equals(true,roque.leAgradaElSol())
+	assert.equals(#{miami},roque.actividadesEsforzadas())
+	
+	assert.equals(#{marDelPlata,miami},roque.actividadesRealizadas())
+	assert.equals(#{marDelPlata,miami},ana.actividadesRealizadas())
+	
+	ana.registraActividad(nevada)
+	assert.equals(#{marDelPlata,miami,nevada},ana.actividadesRealizadas())
+	
+	assert.equals(false,roque.leAtraeLaActividad(actividadFisica))
+	assert.equals(true,roque.leAtraeLaActividad(miami))
+	
+	assert.equals(false,actividadFisica.esReconmendablePara(roque))
+	assert.equals(true,actividadFisica.esReconmendablePara(ana))
+	
+	assert.equals(false,moscu.esReconmendablePara(roque))
+	assert.equals(false,moscu.esReconmendablePara(ana))
+	assert.equals(false,miami.esReconmendablePara(ana))
+	
+	}
+	
+	test"libros"{
+	assert.equals(4,libreriaA.diasDeActividad())
+	assert.equals(4,libreriaB.diasDeActividad())
+	
+	assert.equals(false,libreriaA.produceBronceado())
+	assert.equals(false,libreriaB.produceBronceado())
+	
+	assert.equals(false,libreriaA.esReconmendablePara(pepe))
+	assert.equals(true,libreriaA.esReconmendablePara(ana))
+	
+	assert.equals(true,libreriaA.esfueszo()) // lo intente
+	assert.equals(true,libreriaB.esfueszo())
+	
+	}
+	
+}
